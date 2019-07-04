@@ -23,9 +23,8 @@ func del(args ...string) (res interface{}, err error) {
 			err = tx.DeleteBucket([]byte(args[0]))
 			if err == nil {
 				found = true
-			} else if err == bolt.ErrBucketNotFound {
-				return nil
 			}
+
 			return err
 		}
 		b := tx.Bucket([]byte(args[0]))
