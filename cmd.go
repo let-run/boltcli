@@ -13,6 +13,7 @@ import (
 )
 
 func del(args ...string) (res interface{}, err error) {
+	fmt.Println(args)
 	argsLen := len(args)
 	if argsLen == 0 {
 		return nil, fmt.Errorf("wrong number of arguments for '%s' command", "del")
