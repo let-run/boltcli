@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/Shopify/go-lua"
   packages = ["."]
-  revision = "88a6f168eee0ba102d7d20c5281056a5dd3d7550"
+  revision = "e389fc5bb7e7d12e4bd23e7bd9f3ab013209eb59"
 
 [[projects]]
   name = "github.com/chzyer/readline"
@@ -16,20 +16,29 @@
 [[projects]]
   name = "github.com/coreos/bbolt"
   packages = ["."]
-  revision = "aa66506030b376f848667d84d2596faa8a7099ea"
-  version = "v1.0"
+  revision = "a0458a2b35708eef59eb5f620ceb3cd1c01a824d"
+  version = "v1.3.3"
 
 [[projects]]
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
-  revision = "346938d642f2ec3594ed81d874461961cd0faa76"
-  version = "v1.1.0"
+  revision = "8991bc29aa16c548c550c7ff78260e27b9ab7c73"
+  version = "v1.1.1"
 
 [[projects]]
   name = "github.com/gobwas/glob"
-  packages = [".","compiler","match","syntax","syntax/ast","syntax/lexer","util/runes","util/strings"]
-  revision = "bea32b9cd2d6f55753d94a28e959b13f0244797a"
-  version = "v0.2.2"
+  packages = [
+    ".",
+    "compiler",
+    "match",
+    "syntax",
+    "syntax/ast",
+    "syntax/lexer",
+    "util/runes",
+    "util/strings"
+  ]
+  revision = "5ccd90ef52e1e632236f7326478d4faa74f99438"
+  version = "v0.2.3"
 
 [[projects]]
   name = "github.com/pmezard/go-difflib"
@@ -39,13 +48,23 @@
 
 [[projects]]
   name = "github.com/stretchr/testify"
-  packages = ["assert","require","suite"]
-  revision = "69483b4bd14f5845b5a1e55bca19e954e827f1d0"
-  version = "v1.1.4"
+  packages = [
+    "assert",
+    "require",
+    "suite"
+  ]
+  revision = "ffdc059bfe9ce6a4e144ba849dbedead332c6053"
+  version = "v1.3.0"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/sys"
+  packages = ["unix"]
+  revision = "04f50cda93cbb67f2afa353c52f342100e80e625"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "5933a9ac04e2598d52681d792c30e954e5b6c7424303ee32f5e66a42307c1596"
+  inputs-digest = "f18c8437e141e31f63daedf0864d85c9c48199a88c8f3d7c844095bad1ec3925"
   solver-name = "gps-cdcl"
   solver-version = 1

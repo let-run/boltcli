@@ -1,54 +1,38 @@
-TEST=.
-BENCH=.
-COVERPROFILE=/tmp/c.out
 BRANCH=`git rev-parse --abbrev-ref HEAD`
 COMMIT=`git rev-parse --short HEAD`
 GOLDFLAGS="-X main.branch $(BRANCH) -X main.commit $(COMMIT)"
 
 default: build
 
-bench:
-	go test -v -test.run=NOTHINCONTAINSTHIS -test.bench=$(BENCH)
+race:
+	@TEST_FREELIST_TYPE=hashmap go test -v -race -test.run="TestSimulate_(100op|1000op)"
+	@echo "array freelist test"
+	@TEST_FREELIST_TYPE=array go test -v -race -test.run="TestSimulate_(100op|1000op)"
 
-# http://cloc.sourceforge.net/
-cloc:
-	@cloc --not-match-f='Makefile|_test.go' .
+fmt:
+	!(gofmt -l -s -d $(shell find . -name \*.go) | grep '[a-z]')
 
-cover: fmt
-	go test -coverprofile=$(COVERPROFILE) -test.run=$(TEST) $(COVERFLAG) .
-	go tool cover -html=$(COVERPROFILE)
-	rm $(COVERPROFILE)
+# go get honnef.co/go/tools/simple
+gosimple:
+	gosimple ./...
 
-cpuprofile: fmt
-	@go test -c
-	@./bolt.test -test.v -test.run=$(TEST) -test.cpuprofile cpu.prof
+# go get honnef.co/go/tools/unused
+unused:
+	unused ./...
 
 # go get github.com/kisielk/errcheck
 errcheck:
-	@echo "=== errcheck ==="
-	@errcheck github.com/boltdb/bolt
+	@errcheck -ignorepkg=bytes -ignore=os:Remove go.etcd.io/bbolt
 
-fmt:
-	@go fmt ./...
+test:
+	TEST_FREELIST_TYPE=hashmap go test -timeout 20m -v -coverprofile cover.out -covermode atomic
+	# Note: gets "program not an importable package" in out of path builds
+	TEST_FREELIST_TYPE=hashmap go test -v ./cmd/bbolt
 
-get:
-	@go get -d ./...
+	@echo "array freelist test"
 
-build: get
-	@mkdir -p bin
-	@go build -ldflags=$(GOLDFLAGS) -a -o bin/bolt ./cmd/bolt
+	@TEST_FREELIST_TYPE=array go test -timeout 20m -v -coverprofile cover.out -covermode atomic
+	# Note: gets "program not an importable package" in out of path builds
+	@TEST_FREELIST_TYPE=array go test -v ./cmd/bbolt
 
-test: fmt
-	@go get github.com/stretchr/testify/assert
-	@echo "=== TESTS ==="
-	@go test -v -cover -test.run=$(TEST)
-	@echo ""
-	@echo ""
-	@echo "=== CLI ==="
-	@go test -v -test.run=$(TEST) ./cmd/bolt
-	@echo ""
-	@echo ""
-	@echo "=== RACE DETECTOR ==="
-	@go test -v -race -test.run="TestSimulate_(100op|1000op)"
-
-.PHONY: bench cloc cover cpuprofile fmt memprofile test
+.PHONY: race fmt errcheck test gosimple unused
